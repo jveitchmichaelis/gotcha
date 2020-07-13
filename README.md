@@ -1,6 +1,8 @@
 # Parallel GOTCHA implementation
 
-This repository provides an up-to-date, CPU-parallel, version of the GOTCHA stereo matching algorithm.
+GOTCHA is a region-growing stereo matcher that uses Adaptive Least Squares Correlation to match image patches. What it lacks in speed it makes up for in accuracy. GOTCHA has been used extensively for Mars terrain reconstruction in various projects. Unlike many matching algorithms, GOTCHA does not place any limits on the range of disparities it can match. The initial stage in the matching process is feature- or tie-point generation - sparse matches between images. The disparity map is then expanded around these regions iteratively.
+
+This repository provides an up-to-date, CPU-parallel, version of the GOTCHA stereo matching algorithm. Compared to its 5th generation predecessor it runs an order of magnitude (or more) faster when single-threaded and offers practically linear speedup with multiple cores. This development enabled matching Gigapixel-scale imagery in a reasonable amount of time (e.g. minutes) rather than days! This speed-up was achieved by making a few modifications to the ALSC implementation, adding parallel execution for the region growing process and making some better choices concerning data structures.
 
 # Building and running
 
@@ -27,9 +29,67 @@ you can then view the output disparity and confidence maps. Note that the `disMa
 
 Run the `test.sh` script to build and verify that everything works.
 
-# License
+# Notes
 
-This code was developed during my PhD between 2012-2016 whilst funded as an STFC-CASE studentship between University College London (UCL) Mullard Space Science Laboratory (MSSL) Imaging Group and Is-Instruments Ltd. It is adapted from [here](https://github.com/mssl-imaging/CASP-GO) which is released under the Apache 2.0 license. This source has been released with permission of the MSSL Imaging Group.
+There are several parameters that may be worth fiddling with for different image sizes or situations. These are currently hard-coded, but the main parameters are set in `src/gotcha.cpp`:
+
+```
+    /* Define GOTCHA parameters */
+    CDensifyParam params;
+    params.m_nProcType = CDensifyParam::GOTCHA;
+    params.m_nTPType = CDensifyParam::TP_UNKNOWN;
+    params.m_paramGotcha.m_nNeiType = CGOTCHAParam::NEI_8;
+    params.m_paramGotcha.m_paramALSC.m_bIntOffset = 1;
+    params.m_paramGotcha.m_paramALSC.m_bWeighting = 0;
+    params.m_paramGotcha.m_bNeedInitALSC = 0;
+    params.m_paramGotcha.m_paramALSC.m_fEigThr = 130;
+    params.m_paramGotcha.m_paramALSC.m_nPatch = 12;
+    params.m_paramGotcha.m_paramALSC.m_fAffThr = 1.5;
+    params.m_paramGotcha.m_paramALSC.m_fDriftThr = 1.0;
+    params.m_paramGotcha.m_paramALSC.m_nMaxIter = 8;
+```
+
+For example the `m_fEigThr` parameter roughly controls how confident a match needs to be for it to be accepted. Reducing this will allow more of the image to be matched, but you may get incorrect matches. Conversely, you can raise it and only retain super-confident regions. For most purposes values around 120-140 should be OK. For images such as from Mars where there is generally excellent surface texture in the landscape, you can leave it high.
+
+You can also set the patch size `m_nPatch` - big patch = easier matching, but smoother and potentially wrong disparity maps.
+
+The other parameters `m_fAffThr` and `m_fDriftThr` are how far the patch under consideration is allowed to be warped - these values are in pixels.
+
+`m_bNeedInitALSC` will optionally perform ALSC patch refinement on the original tiepoints, but there isn't a huge benefit in doing this as we run ALSC during the main algorithm anyway.
+
+Some options are not supported - tiling does not exist in this version of the code (for the better, I think) and weighting is not currently implemented.
+
+# License and attribution
+
+This particular implementation of GOTCHA (also known as Speeded-up or S-GOTCHA) was developed during my PhD between 2012-2016 whilst funded as an STFC-CASE studentship between University College London (UCL) Mullard Space Science Laboratory (MSSL) Imaging Group and Is-Instruments Ltd. Most of the core routines were either directly taken from, or adapted from, [here](https://github.com/mssl-imaging/CASP-GO) which is released under the Apache 2.0 license. To be clear, this codebase represents several generations of MSSL researchers who worked hard on it! This source has been released with permission of the MSSL Imaging Group.
+
+The GOTCHA algorithm was originally developed by Gruen, Otto and Chau (hence the acronym):
+
+```
+@article{Otto1989RegiongrowingAF,
+  title={"Region-growing" algorithm for matching of terrain images},
+  author={G. P. Otto and T. K. W. Chau},
+  journal={Image Vis. Comput.},
+  year={1989},
+  volume={7},
+  pages={83-94}
+}
+```
+
+various updates have been developed over the years, including Shin and Muller (this paper is already the 5th version of the codebase; s-gotcha is arguably the 6th generation):
+
+```
+@article{article,
+author = {Shin, Dongjoe and Muller, J.-P},
+year = {2012},
+month = {10},
+pages = {3795–3809},
+title = {Progressively weighted affine adaptive correlation matching for quasi-dense 3D reconstruction},
+volume = {45},
+journal = {Pattern Recognition},
+doi = {10.1016/j.patcog.2012.03.023}
+}
+```
 
 The SIFT executable is provided for historic purposes and the copyright recently expired.
 
@@ -39,7 +99,7 @@ If you use this code, please cite my doctoral thesis: https://discovery.ucl.ac.u
 
 and our paper on cloud Mars processing: https://www.sciencedirect.com/science/article/pii/S0032063317303252
 
-```
+``` bibtex
 @article{TAO201830,
 title = "Massive stereo-based DTM production for Mars on cloud computers",
 journal = "Planetary and Space Science",
