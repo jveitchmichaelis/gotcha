@@ -1,0 +1,6 @@
+build
+disMap*.txt
+disparity*.png
+disparity_sim.txt
+procLog.txt
+tiepoints.txt
