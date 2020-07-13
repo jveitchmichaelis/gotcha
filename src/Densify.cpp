@@ -159,6 +159,7 @@ vector<CTiePt> CDensify::getIntToFloatSeed(vector<CTiePt>& vecTPSrc) {
 
         //Apply ALSC on initial neighbouring seed points are good
         ALSC alsc(m_imgL, m_imgR,  m_paramDense.m_paramGotcha.m_paramALSC);
+        alsc.enable_interpolation_lut(true);
         alsc.performALSC(&vectpSeeds);
         vectpSeeds.clear();
         alsc.getRefinedTps(vectpSeeds); // hard-copy

@@ -2,6 +2,7 @@
 #define ALSC_H
 
 #include <iostream>
+#include <unordered_map>
 #include <math.h>
 #include <fstream>
 #include <vector>
@@ -24,6 +25,7 @@ public:
     void getRefinedTps(vector<CTiePt>& vecRefTP) const {vecRefTP = m_pvecRefTP;}
     const vector<CTiePt>* getRefinedTps() {return &m_pvecRefTP;} // the result which passes the ALSC test
     vector<int> getPassList() {return m_vecPassList;}
+    void enable_interpolation_lut(bool enable){ use_interpolation_lut = enable; }
 
     enum{NO_ERR, OB_ERR};
 
@@ -34,7 +36,7 @@ private:
     void distortPatch(const Mat& matImg, const Point2f ptCentre, const float* pfAff, Eigen::Ref<Eigen::MatrixXf> matImgPatch, Point2f* pptUpdated = NULL);
     bool doMatching(Point2f ptStartL, Point2f ptStartR, CTiePt& tp, const float* pfAffInt = NULL);
     void affineTransform(double x, double y, const Point2f ptCentre, const float *pfAff, double *dNewX, double *dNewY);
-    float interpolate(double dNewX, double dNewY, const Mat &matImg);
+    float interpolate(const double dNewX, const double dNewY, const Mat &matImg);
     void saveMat(Mat& matIn, string strFile);
 
 private:
@@ -61,6 +63,11 @@ private:
 
     std::vector< std::vector<float> > pfGx;
     std::vector< std::vector<float> > pfGy;
+
+    bool use_interpolation_lut = false;
+    float interpolation_factor = 2.0;
+    cv::Mat interpolation_map_left;
+    cv::Mat interpolation_map_right;
 
     Eigen::MatrixXf matPatchL;
     Eigen::MatrixXf matPatchR;

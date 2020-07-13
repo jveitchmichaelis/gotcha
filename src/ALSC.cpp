@@ -43,6 +43,11 @@ ALSC::ALSC(Mat imgL, Mat imgR, CALSCParam paramALSC){
         pfGy[i].resize(nColPatch);
     }
 
+    interpolation_factor = 4.0;
+
+    cv::resize(imgL, interpolation_map_left, {}, interpolation_factor, interpolation_factor);
+    cv::resize(imgR, interpolation_map_right, {}, interpolation_factor, interpolation_factor);
+
 }
 
 bool ALSC::isIntersecting(Rect rectA, Rect rectB){
@@ -54,6 +59,19 @@ bool ALSC::isIntersecting(Rect rectA, Rect rectB){
     else bRes = false;
 
     return bRes;
+}
+
+void svd22(const double a[4], double u[4], double s[2], double v[4]) {
+    s[0] = (sqrt(pow(a[0] - a[3], 2) + pow(a[1] + a[2], 2)) + sqrt(pow(a[0] + a[3], 2) + pow(a[1] - a[2], 2))) / 2;
+    s[1] = fabs(s[0] - sqrt(pow(a[0] - a[3], 2) + pow(a[1] + a[2], 2)));
+    v[2] = (s[0] > s[1]) ? sin((atan2(2 * (a[0] * a[1] + a[2] * a[3]), a[0] * a[0] - a[1] * a[1] + a[2] * a[2] - a[3] * a[3])) / 2) : 0;
+    v[0] = sqrt(1 - v[2] * v[2]);
+    v[1] = -v[2];
+    v[3] = v[0];
+    u[0] = (s[0] != 0) ? (a[0] * v[0] + a[1] * v[2]) / s[0] : 1;
+    u[2] = (s[0] != 0) ? (a[2] * v[0] + a[3] * v[2]) / s[0] : 0;
+    u[1] = (s[1] != 0) ? (a[0] * v[1] + a[1] * v[3]) / s[1] : -u[2];
+    u[3] = (s[1] != 0) ? (a[2] * v[1] + a[3] * v[3]) / s[1] : u[0];
 }
 
 bool ALSC::doMatching(Point2f ptStartL, Point2f ptStartR, CTiePt& tp, const float* pfAffStart){
@@ -183,15 +201,21 @@ bool ALSC::doMatching(Point2f ptStartL, Point2f ptStartR, CTiePt& tp, const floa
         double dResidual = 0.f;
         dResidual = sqrt(dErrorSum / (double) nSystemMatrixRows);
 
-        // maximum eigenvalue of shift covariance matrix
+        // approximate the maximum eigenvalue of the shift covariance matrix
         float a = emAS(0, 0);
         float b = emAS(3, 0);
+        float c = b;
         float d = emAS(3, 3);
-        float pdC[2][2] = {{a, b}, {b, d}};
-        Mat matC(2, 2, CV_32FC1, pdC);
-        SVD svd(matC.inv());
-        dEigenVal = svd.w.at<float>(0,0); // maximum eigenvalues
+        
+        // This seems to be almost always extremely close to taking the best Eigenvalue
+        // but it doesn't involve calculating an inverse and an SVD to do it
+        double det = 1.0/(a*d - b*c + 1e-9);
+        dEigenVal = det*d; // maximum eigenvalue
         dEigenVal *= 10000.0f * dSTDResidual; // scaling
+
+        // Old alternative for ref:
+
+        
 
         //////////////////////////////////////////////////////////////
         // check the validity of solution
@@ -359,8 +383,17 @@ void ALSC::distortPatch(const Mat& matImg, const Point2f ptCentre, const float* 
                     /* Perform the affine transform on the points */
                     affineTransform(initX+i, initY+j, ptCentre, pfAff, &dNewX, &dNewY);
 
-                    matImgPatch(j,i) = interpolate(dNewX, dNewY, matImg);
-
+                    if(use_interpolation_lut){
+                        if(&matImg == &m_imgL){
+                            matImgPatch(j,i) = interpolation_map_left.at<unsigned char>((int) round(interpolation_factor*dNewY), (int) round(interpolation_factor*dNewX));
+                        }else{
+                            matImgPatch(j,i) = interpolation_map_right.at<unsigned char>((int) round(interpolation_factor*dNewY), (int) round(interpolation_factor*dNewX));
+                        }
+                    }else{
+                        matImgPatch(j,i) = interpolate(dNewX, dNewY, matImg);
+                    }
+                    
+                    
                     /* Check if we're at one of the patch corners and store into the boundary array if needed */
                     if(i == 0){
                         if(j == 0){
@@ -379,7 +412,7 @@ void ALSC::distortPatch(const Mat& matImg, const Point2f ptCentre, const float* 
     return;
 }
 
-float ALSC::interpolate(double dNewX, double dNewY, const Mat &matImg){
+float ALSC::interpolate(const double dNewX, const double dNewY, const Mat &matImg){
     int x1, x2, y2, y1;
     float val1, val2, val3, val4;
     float fPixelVal = 0.0;

@@ -4,6 +4,7 @@ ALSCWorker::ALSCWorker(const Mat &matImgL, const Mat &matImgR, const CALSCParam 
 {
     //ALSC Object for this object to work on
     matcher = ALSC(matImgL, matImgR, params);
+    matcher.enable_interpolation_lut(true);
     this->vmap = vmap;
     seedpointList = seedlist;
     this->id = i;
@@ -17,7 +18,7 @@ void ALSCWorker::run()
     vectpAdded.clear();
 
     // Region Growing Begins
-    // While there are seed points left in the tile:
+    // While there are seed points left in the queue:
 
     while (seedpointList->size() > 0) {
         // Pop a tiepoint from the seed heap
@@ -44,9 +45,9 @@ void ALSCWorker::run()
             // Recover the refined tie points from the ALSC process (those that survived)
             const vector<CTiePt>* matched = matcher.getRefinedTps();
 
-            // If some of the tiepoints were succesfully matched:
+            // If some of the tiepoints were successfully matched:
             if(matched->size() > 0){
-                // Append matched neighbours to the seed point list and update the LUT
+                // Append matched neighbours to the seed point list and update the visited map
                 for (int i = 0; i < (int) matched->size(); i++){
                     CTiePt tp = matched->at(i);
                     vmap->addPoint(tp);
