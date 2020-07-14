@@ -5,9 +5,9 @@ project(cligotcha)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(CMAKE_CXX_FLAGS "-Wall -Wextra")
-set(CMAKE_CXX_FLAGS "-pthread -O3 -mavx -ftree-vectorizer-verbose=2 -ffast-math")
-set(CMAKE_CXX_FLAGS_DEBUG "-g3 -fopt-info-vec-all")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -pthread ")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -ftree-vectorizer-verbose=2 -ffast-math")
+set(CMAKE_CXX_FLAGS_DEBUG "-ggdb -O0")
 
 
 find_package( OpenCV REQUIRED )
