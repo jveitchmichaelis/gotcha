@@ -67,7 +67,7 @@ Most of the core routines were either directly taken from, or adapted from, [her
 
 This particular implementation of GOTCHA (also known as Speeded-up or S-GOTCHA) was developed during my PhD between 2012-2016 whilst funded as an STFC-CASE studentship between University College London (UCL) Mullard Space Science Laboratory (MSSL) Imaging Group and Is-Instruments Ltd.
 
-The history of GOTCHA now spans well over 30 years. The origin can be traced back to [Prof. Jan-Peter Muller's](https://www.ucl.ac.uk/mssl/people/prof-jan-peter-muller) involvement in the Alvey MMI-137 project using [transputers](https://en.wikipedia.org/wiki/Transputer) for 2.5D image reconstruction. Since then, development of GOTCHA has been led by Prof. Muller as head of the imaging group at MSSL and several key references can be found below:
+The history of GOTCHA now spans well over 30 years. The origin can be traced back to [Prof. Jan-Peter Muller's](https://www.ucl.ac.uk/mssl/people/prof-jan-peter-muller) leadership of the Alvey MMI-137 project using [transputers](https://en.wikipedia.org/wiki/Transputer) for 2.5D image reconstruction. Since then, development of GOTCHA has been led by Prof. Muller as head of the imaging group at MSSL and several key references can be found below:
 
 ``` bibtex
 @article{Muller1988RealtimeSM,
@@ -77,6 +77,12 @@ The history of GOTCHA now spans well over 30 years. The origin can be traced bac
   year={1988},
   volume={2},
   pages={1185-1186}
+}
+
+@inproceedings{Muller1988StereoMU,
+  title={Stereo Matching Using Transputer Arrays},
+  author={J-P. Muller and Ka Collins and G. P. Otto and J.B.G. Roberts},
+  year={1988}
 }
 ```
 
