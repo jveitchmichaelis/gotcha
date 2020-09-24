@@ -86,9 +86,24 @@ The history of GOTCHA now spans well over 30 years. The origin can be traced bac
 }
 ```
 
-The GOTCHA algorithm was originally proposed by Gruen, Otto and Chau (hence the acronym):
+The GOTCHA algorithm was originally proposed by Otto and Chau using Gruen's Adaptive Least Squares Correlation method (hence the acronym):
 
 ``` bibtex
+@inproceedings{10.1117/12.952246,
+author = {Armin W. Gruen and Emmanuel P. Baltsavias},
+title = {{Adaptive Least Squares Correlation With Geometrical Constraints}},
+volume = {0595},
+booktitle = {Computer Vision for Robots},
+editor = {Olivier D. Faugeras and Robert B. Kelley},
+organization = {International Society for Optics and Photonics},
+publisher = {SPIE},
+pages = {72 -- 82},
+year = {1986},
+doi = {10.1117/12.952246},
+URL = {https://doi.org/10.1117/12.952246}
+}
+
+
 @article{Otto1989RegiongrowingAF,
   title={"Region-growing" algorithm for matching of terrain images},
   author={G. P. Otto and T. K. W. Chau},
