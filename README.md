@@ -66,7 +66,7 @@ Most of the core routines were either directly taken from, or adapted from, [her
 This particular implementation of GOTCHA (also known as Speeded-up or S-GOTCHA) was developed during my PhD between 2012-2016 whilst funded as an STFC-CASE studentship between University College London (UCL) Mullard Space Science Laboratory (MSSL) Imaging Group and Is-Instruments Ltd.
 The GOTCHA algorithm was originally developed by Gruen, Otto and Chau (hence the acronym):
 
-```
+``` bibtex
 @article{Otto1989RegiongrowingAF,
   title={"Region-growing" algorithm for matching of terrain images},
   author={G. P. Otto and T. K. W. Chau},
@@ -79,7 +79,7 @@ The GOTCHA algorithm was originally developed by Gruen, Otto and Chau (hence the
 
 various updates have been developed over the years, including Shin and Muller (this paper is already the 5th version of the codebase; s-gotcha is arguably the 6th generation):
 
-```
+``` bibtex
 @article{article,
 author = {Shin, Dongjoe and Muller, J.-P},
 year = {2012},
@@ -92,7 +92,7 @@ doi = {10.1016/j.patcog.2012.03.023}
 }
 ```
 
-```
+``` bibtex
 @article{article,
 author = {Shin, D.; Tao, Y.; Muller, J.-P.},
 year = {2018},
