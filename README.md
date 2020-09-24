@@ -61,10 +61,26 @@ Some options are not supported - tiling does not exist in this version of the co
 
 # License and history of GOTCHA
 
-Most of the core routines were either directly taken from, or adapted from, [here](https://github.com/mssl-imaging/CASP-GO) which is released under the **Apache 2.0 license**. To be clear, this codebase represents several generations of MSSL researchers who worked hard on it! This source has been released with permission of the MSSL Imaging Group. This codebase is also released under Apache 2.0. Please familiarise yourself with the license file in this repository.
+This source has been released with permission of UCL. This codebase is released under Apache 2.0. Please familiarise yourself with the license file in this repository.
+
+Most of the core routines were either directly taken from, or adapted from, [here](https://github.com/mssl-imaging/CASP-GO) which is released under the **Apache 2.0 license**. To be clear, this codebase represents several generations of MSSL researchers who worked hard on it.
 
 This particular implementation of GOTCHA (also known as Speeded-up or S-GOTCHA) was developed during my PhD between 2012-2016 whilst funded as an STFC-CASE studentship between University College London (UCL) Mullard Space Science Laboratory (MSSL) Imaging Group and Is-Instruments Ltd.
-The GOTCHA algorithm was originally developed by Gruen, Otto and Chau (hence the acronym):
+
+The history of GOTCHA now spans well over 30 years. The origin can be traced back to [Prof. Jan-Peter Muller's](https://www.ucl.ac.uk/mssl/people/prof-jan-peter-muller) involvement in the Alvey MMI-137 project using [transputers](https://en.wikipedia.org/wiki/Transputer) for 2.5D image reconstruction. Since then, development of GOTCHA has been led by Prof. Muller as head of the imaging group at MSSL and several key references can be found below:
+
+``` bibtex
+@article{Muller1988RealtimeSM,
+  title={Real-time Stereo Matching Spot Using Transputer Arrays},
+  author={J. Muller and G. P. Otto and T. Chau and Ka Collins and N. Day and I. Dowman and M. Jackson and M. O'Neill and V. Paramananda and J.B.G. Roberts and A. Stevens and M. Upton},
+  journal={International Geoscience and Remote Sensing Symposium, 'Remote Sensing: Moving Toward the 21st Century'.},
+  year={1988},
+  volume={2},
+  pages={1185-1186}
+}
+```
+
+The GOTCHA algorithm was originally proposed by Gruen, Otto and Chau (hence the acronym):
 
 ``` bibtex
 @article{Otto1989RegiongrowingAF,
@@ -77,7 +93,9 @@ The GOTCHA algorithm was originally developed by Gruen, Otto and Chau (hence the
 }
 ```
 
-various updates have been developed over the years, including Shin and Muller (this paper is already the 5th version of the codebase; s-gotcha is arguably the 6th generation):
+While GOTCHA was initially used for processing terrestrial satellite imagery (e.g. SPOT), it has since been used in industrial applications such as surface reconstruction for crack/defect detection and is now routinely used for Martian applications, both for rover and orbital imagery. UCL was the first [NASA Regional Planetary Image Facility](https://en.wikipedia.org/wiki/Regional_Planetary_Image_Facility) (RPIF) outside the US, in 1980, and is therefore extremely well-placed for this kind of research. Prof. Muller is the current director of the UK NASA RPIF at UCL.
+
+Various improvements and modifications have been developed over the years, including Shin and Muller (this paper is already the 5th version of the codebase; s-gotcha is arguably the 6th generation):
 
 ``` bibtex
 @article{article,
@@ -91,6 +109,8 @@ journal = {Pattern Recognition},
 doi = {10.1016/j.patcog.2012.03.023}
 }
 ```
+
+also by Shin, Tau and Muller:
 
 ``` bibtex
 @article{article,
