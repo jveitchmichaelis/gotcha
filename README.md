@@ -59,10 +59,11 @@ The other parameters `m_fAffThr` and `m_fDriftThr` are how far the patch under c
 
 Some options are not supported - tiling does not exist in this version of the code (for the better, I think) and weighting is not currently implemented.
 
-# License and attribution
+# License and history of GOTCHA
 
-This particular implementation of GOTCHA (also known as Speeded-up or S-GOTCHA) was developed during my PhD between 2012-2016 whilst funded as an STFC-CASE studentship between University College London (UCL) Mullard Space Science Laboratory (MSSL) Imaging Group and Is-Instruments Ltd. Most of the core routines were either directly taken from, or adapted from, [here](https://github.com/mssl-imaging/CASP-GO) which is released under the Apache 2.0 license. To be clear, this codebase represents several generations of MSSL researchers who worked hard on it! This source has been released with permission of the MSSL Imaging Group.
+Most of the core routines were either directly taken from, or adapted from, [here](https://github.com/mssl-imaging/CASP-GO) which is released under the **Apache 2.0 license**. To be clear, this codebase represents several generations of MSSL researchers who worked hard on it! This source has been released with permission of the MSSL Imaging Group. This codebase is also released under Apache 2.0. Please familiarise yourself with the license file in this repository.
 
+This particular implementation of GOTCHA (also known as Speeded-up or S-GOTCHA) was developed during my PhD between 2012-2016 whilst funded as an STFC-CASE studentship between University College London (UCL) Mullard Space Science Laboratory (MSSL) Imaging Group and Is-Instruments Ltd.
 The GOTCHA algorithm was originally developed by Gruen, Otto and Chau (hence the acronym):
 
 ```
@@ -91,11 +92,27 @@ doi = {10.1016/j.patcog.2012.03.023}
 }
 ```
 
-The SIFT executable is provided for historic purposes and the copyright recently expired.
+```
+@article{article,
+author = {Shin, D.; Tao, Y.; Muller, J.-P.},
+year = {2018},
+pages = {159-167},
+title = {Evaluation of Close-Range Stereo Matching Algorithms Using Stereoscopic Measurements.},
+volume = {84},
+journal = {Photogramm Eng Rem S},
+doi = {10.14358/PERS.84.3.159}
+}
+```
+
+The [SIFT executable](https://www.cs.ubc.ca/~lowe/keypoints/) is provided for historic purposes and the copyright recently expired. We will move this to OpenCV's implementation shortly.
+
+```
+David G. Lowe, "Distinctive image features from scale-invariant keypoints," International Journal of Computer Vision, 60, 2 (2004), pp. 91-110.
+```
 
 # Citation
 
-If you use this code, please cite my doctoral thesis: https://discovery.ucl.ac.uk/id/eprint/1536083/
+If you use this version of the code, please cite my doctoral thesis: https://discovery.ucl.ac.uk/id/eprint/1536083/
 
 and our paper on cloud Mars processing: https://www.sciencedirect.com/science/article/pii/S0032063317303252
 
